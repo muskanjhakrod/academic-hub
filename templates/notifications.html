@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Your Notifications - Academic Hub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <h2 class="mb-4 fw-bold text-center">🔔 Notifications</h2>
+        
+        {% if notifications %}
+            <div class="list-group">
+                {% for notif in notifications %}
+                {% set link_url = url_for('posts.view_post', post_id=notif.post_id) if notif.post_id else url_for('users.user_profile', username='some_default_user') %}
+                
+                <a href="{{ link_url }}" class="list-group-item list-group-item-action {% if not notif.read %}list-group-item-info shadow-sm{% else %}list-group-item-light{% endif %}" aria-current="true">
+                    <div class="d-flex w-100 justify-content-between">
+                        {% if notif.type == 'comment' %}
+                            <h5 class="mb-1"><i class="fas fa-comment me-2 text-info"></i> New Comment</h5>
+                        {% elif notif.type == 'follow' %}
+                            <h5 class="mb-1"><i class="fas fa-user-plus me-2 text-success"></i> New Follower</h5>
+                        {% else %}
+                            <h5 class="mb-1"><i class="fas fa-bell me-2 text-primary"></i> Alert</h5>
+                        {% endif %}
+                        
+                        <small class="text-muted">
+                            {{ notif.timestamp.strftime('%b %d, %Y at %I:%M %p') }}
+                        </small>
+                    </div>
+                    <p class="mb-1 fw-medium">{{ notif.message }}</p>
+                    {% if not notif.read %}
+                        <small class="text-danger fw-bold">NEW</small>
+                    {% else %}
+                        <small class="text-muted">Viewed</small>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning text-center mt-5" role="alert">
+                You currently have no notifications. Time to share some insights!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

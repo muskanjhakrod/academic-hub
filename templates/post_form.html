@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card shadow-lg p-md-5 p-3 mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            
+            {% if action == 'Create' %}
+                <h2 class="card-title text-primary mb-4">Submit a New Insight 💡</h2>
+                <p class="card-subtitle text-muted mb-4">Share your recent findings, research summary, or a new academic viewpoint.</p>
+                <form method="POST" action="{{ url_for('posts.create_new_post') }}">
+            {% else %}
+                <h2 class="card-title text-info mb-4">Edit Insight ✏️</h2>
+                <p class="card-subtitle text-muted mb-4">Review and update your published content.</p>
+                <form method="POST" action="{{ url_for('posts.edit_post', post_id=post_id) }}">
+            {% endif %}
+
+                <div class="mb-4">
+                    <label for="content" class="form-label fw-bold">Key Findings/Summary:</label>
+                    <textarea 
+                        id="content" 
+                        name="content" 
+                        class="form-control" 
+                        rows="10" 
+                        required 
+                        placeholder="Type your academic insight here...">
+                        {{ post.text_content if post else '' }}
+                    </textarea>
+                </div>
+                
+                {% if action == 'Create' %}
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Publish Insight</button>
+                {% else %}
+                    <button type="submit" class="btn btn-info btn-lg w-100 mt-3">Update Post</button>
+                {% endif %}
+                
+            </form>
+        </div>
+    </div>
+{% endblock %}

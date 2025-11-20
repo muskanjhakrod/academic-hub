@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-lg p-md-5 p-3 mx-auto" style="max-width: 700px;">
+<h2 class="card-title text-primary mb-4">Edit Your Scholar Profile</h2>
+<p class="card-subtitle text-muted mb-4">Update your bio, expertise, and professional details.</p>
+
+<form method="POST" action="{{ url_for('posts.edit_profile') }}">
+    
+    <!-- Username (Display Only) -->
+    <div class="mb-3">
+        <label class="form-label fw-bold">Username</label>
+        <p class="form-control-plaintext border-bottom">@{{ profile.username }}</p>
+        <!-- No hidden input needed, as we fetch user by session ID -->
+    </div>
+    
+    <!-- Email (Display Only) -->
+    <div class="mb-3">
+        <label class="form-label fw-bold">Email</label>
+        <p class="form-control-plaintext border-bottom">{{ profile.email }}</p>
+    </div>
+
+    <!-- Profession Field -->
+    <div class="mb-3">
+        <label for="profession" class="form-label fw-bold">Professional Role</label>
+        <input type="text" id="profession" name="profession" class="form-control" 
+               value="{{ profile.get('profession', '') }}" placeholder="e.g., PhD Candidate, Data Analyst">
+    </div>
+
+    <!-- Bio Field -->
+    <div class="mb-3">
+        <label for="bio" class="form-label fw-bold">Bio/Research Summary</label>
+        <textarea id="bio" name="bio" class="form-control" rows="4" 
+                  placeholder="A brief summary of your background or interests.">{{ profile.get('bio', '') }}</textarea>
+    </div>
+
+    <!-- Tags/Expertise Field -->
+    <div class="mb-4">
+        <label for="tags" class="form-label fw-bold">Expertise Tags</label>
+        <!-- Joins the list of tags into a comma-separated string for the input field -->
+        <input type="text" id="tags" name="tags" class="form-control" 
+               value="{{ profile.tags|join(', ') if profile.tags else '' }}" 
+               placeholder="Comma-separated list (e.g., Python, Neuroscience, Ethics)">
+        <small class="form-text text-muted">Separate your tags/keywords with commas (e.g., "AI, Education, History").</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Save Profile</button>
+    <a href="{{ url_for('posts.user_profile', username=profile.username) }}" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+</form>
+
+
+</div>
+{% endblock %}
